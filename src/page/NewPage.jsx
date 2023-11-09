@@ -18,7 +18,7 @@ function NewPage() {
 
   const getItem = async () => {
     axios
-      .get(`${process.env.REACT_API_APP}new/item`)
+      .get(`${process.env.REACT_API_APP}/new/item`)
       .then((res) => {
         setItem(res.data);
         dispatch(falseLoading());
