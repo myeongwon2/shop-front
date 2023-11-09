@@ -15,7 +15,7 @@ function Home() {
 
   const fetchData = async (url, setStateFunction, limit) => {
     await axios
-      .get(url)
+      .get(`${(process.env.REACT_APP_API, url)}`)
       .then((res) => {
         const items = limit ? res.data.slice(0, 8) : res.data;
         setStateFunction(items);
