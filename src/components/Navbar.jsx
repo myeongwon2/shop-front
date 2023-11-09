@@ -71,7 +71,9 @@ function Navbar() {
 
   const getSearch = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API}/search`, { params: { value: search } })
+      .get(`${process.env.REACT_APP_API_URL}/search`, {
+        params: { value: search },
+      })
       .then((res) => {
         dispatch(getData(res.data));
         setSearch("");

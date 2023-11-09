@@ -13,7 +13,7 @@ function DetailPage() {
   const getData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API}/best/detail`,
+        `${process.env.REACT_APP_API_URL}/best/detail`,
         {
           params: { value: id },
         }

@@ -26,9 +26,13 @@ function Home() {
 
   useEffect(() => {
     dispatch(trueLoading());
-    fetchData(`${process.env.REACT_APP_API}/carousel/item`, setImage, false);
-    fetchData(`${process.env.REACT_APP_API}/best/item`, setBest, true);
-    fetchData(`${process.env.REACT_APP_API}/new/item`, setNewItem, true);
+    fetchData(
+      `${process.env.REACT_APP_API_URL}/carousel/item`,
+      setImage,
+      false
+    );
+    fetchData(`${process.env.REACT_APP_API_URL}/best/item`, setBest, true);
+    fetchData(`${process.env.REACT_APP_API_URL}/new/item`, setNewItem, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
