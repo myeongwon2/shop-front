@@ -1,19 +1,30 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
 const CategotyArray = [
   { id: 0, type: "홈", url: "" },
-  { id: 2, type: "베스트", url: "cart" },
-  { id: 3, type: "신상", url: "detail/1" },
-  { id: 4, type: "세일", url: "" },
-  { id: 5, type: "혜택존", url: "" },
+  { id: 1, type: "베스트", url: "bestpage" },
+  { id: 2, type: "신상", url: "newpage" },
+  { id: 3, type: "마이페이지", url: "mypage" },
 ];
 
 function Dropdown() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [borderId, setBorderId] = useState(0);
+  useEffect(() => {
+    if (location.pathname === "/bestpage") {
+      setBorderId(1);
+    } else if (location.pathname === "/newpage") {
+      setBorderId(2);
+    } else if (location.pathname.length === 1) {
+      setBorderId(0);
+    } else {
+      setBorderId(4);
+    }
+  }, [location]);
 
   return (
     <Container>

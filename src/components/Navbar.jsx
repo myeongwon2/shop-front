@@ -1,42 +1,96 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import img from "../img/Logo.png";
 import searchIcon from "../img/search_icon.png";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "./Dropdown";
-import { IconArray } from "../data";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { falseLoading, trueLoading } from "../store/loadingSlice";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { auth } from "../firebase";
+import basket from "../img/shopping_cart_icon.png";
+import favorite from "../img/favorite_heart_like_likes_love_icon.png";
+import profile from "../img/profile.png";
+import { getData, logout, setUserData } from "../store/userSlice";
+import { cartTrue } from "../store/cartSlice";
 
 function Navbar() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const inputRef = useRef(null);
+
+  const user = useSelector((state) => {
+    return state.user;
+  });
+  const cart = useSelector((state) => {
+    return state.cart;
+  });
+  const loading = useSelector((state) => {
+    return state.loading;
+  });
+
+  const handleGoogleLogin = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+
+        //필요한 데이터만 사용
+        const userData = {
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        };
+
+        dispatch(setUserData(userData));
+        navigate("/");
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleGoogleLogout = () => {
+    const userConfirmed = window.confirm("로그아웃 하시겠습니까?");
+    if (userConfirmed) {
+      signOut(auth)
+        .then(() => {
+          dispatch(logout());
+          navigate("/");
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
   const [scroll, setScroll] = useState(false);
   const [search, setSearch] = useState("");
-
-  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
   };
 
   const getSearch = async () => {
-    await axios
-      .get("/search", { params: { value: search } })
-      .then((res) => console.log(res.data));
+    await axios.get("/search", { params: { value: search } }).then((res) => {
+      dispatch(getData(res.data));
+      setSearch("");
+      dispatch(falseLoading());
+    });
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       getSearch();
+      navigate("/searchpage");
     }
   };
 
-  const handleIconClick = useCallback(
-    (url) => {
-      navigate(`/${url}`);
-    },
-    [navigate]
-  );
+  const cartCount = cart.user_init.filter((item) => item.email === user.email);
+  useEffect(() => {
+    dispatch(cartTrue(user.email));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cart.origin, loading]);
 
-  //내린 스크롤 값을 계산해서 10이상이면 setIsScrolled를 true로 변경
+  // 내린 스크롤 값을 계산해서 1이상이면 setIsScrolled를 true로 변경
   useEffect(() => {
     const onScroll = () => {
       const isScrolled = window.scrollY > 1;
@@ -52,26 +106,46 @@ function Navbar() {
   return (
     <div>
       {scroll && <Dummy />}
-      <Container $scroll={scroll.toString()}>
-        <NavbarContainer $scroll={scroll.toString()}>
-          <Logo onClick={() => navigate("/")} />
+      <Container $scroll={scroll}>
+        <NavbarContainer $scroll={scroll}>
+          <Logo
+            onClick={() => {
+              navigate("/");
+              dispatch(trueLoading());
+              setTimeout(() => {
+                dispatch(falseLoading());
+              }, 500);
+            }}
+          />
           <SearchBox>
             <Search
+              ref={inputRef}
+              value={search}
               onChange={(e) => handleSearch(e)}
               onKeyDown={(e) => handleKeyPress(e)}
             />
             <Box>
-              <SearchIcon onClick={() => getSearch()} />
+              <SearchIcon
+                onClick={() => {
+                  getSearch();
+                  navigate("/searchpage");
+                }}
+              />
             </Box>
           </SearchBox>
           <IconContainer>
-            {IconArray.map((item) => (
+            <IconBox $img={basket} onClick={() => navigate("cart")} />
+            <Count onClick={() => navigate("cart")}>{cartCount.length}</Count>
+            <IconBox $img={favorite} onClick={() => navigate("favorite")} />
+            {user.photoURL ? (
               <IconBox
-                key={item.id}
-                $img={item.icon}
-                onClick={() => handleIconClick(item.url)}
+                $br="20px"
+                $img={user.photoURL}
+                onClick={handleGoogleLogout}
               />
-            ))}
+            ) : (
+              <IconBox $img={profile} onClick={handleGoogleLogin} $op="0.4" />
+            )}
           </IconContainer>
         </NavbarContainer>
         {!scroll && <Dropdown />}
@@ -85,12 +159,21 @@ const Dummy = styled.div`
   visibility: hidden;
 `;
 
+const Count = styled.div`
+  color: white;
+  width: 20px;
+  height: 15px;
+  font-size: 10px;
+  border-radius: 20px;
+  background-color: red;
+  margin: 0 0 0 -40px;
+  cursor: pointer;
+`;
+
 const Container = styled.div`
   width: 100%;
   background-color: white;
-  position: ${(props) => (props.$scroll === "true" ? "fixed" : "relative")};
-  box-shadow: ${(props) =>
-    props.$scroll === "true" ? "0px 4px 8px rgba(0, 0, 0, 0.1)" : null};
+  position: ${(props) => (props.$scroll === true ? "fixed" : "relative")};
   top: 0;
   z-index: 999;
 `;
@@ -98,7 +181,7 @@ const Container = styled.div`
 const NavbarContainer = styled.div`
   max-width: 1220px;
   padding: ${(props) =>
-    props.$scroll === "true" ? "15px 5px;" : "30px 5px 20px 5px;"};
+    props.$scroll === true ? "25px 10px;" : "30px 10px 25px 10px;"};
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
@@ -134,7 +217,6 @@ const SearchBox = styled.div`
 const Search = styled.input`
   min-width: 250px;
   height: 40px;
-  /* min-width: 304px; */
   font-size: 18px;
   outline: none;
   border: none;
@@ -183,6 +265,7 @@ const IconBox = styled.div.attrs((props) => ({
 }))`
   width: 35px;
   height: 35px;
+  border-radius: ${(props) => props.$br};
   background-size: cover;
   cursor: pointer;
   @media (max-width: 690px) {

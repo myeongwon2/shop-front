@@ -3,7 +3,7 @@ import styled from "styled-components";
 import pauseImg from "../img/pause.png";
 import playImg from "../img/player3.png";
 import { useDispatch } from "react-redux";
-import { changeLoading } from "../store/store";
+import { falseLoading } from "../store/loadingSlice";
 
 const Carousel = ({ image }) => {
   const [index, setIndex] = useState(0);
@@ -48,7 +48,7 @@ const Carousel = ({ image }) => {
 
   useEffect(() => {
     if (image.length > 4 && loadedCount === image.length) {
-      dispatch(changeLoading());
+      dispatch(falseLoading());
     }
   }, [dispatch, loadedCount, image.length]);
 

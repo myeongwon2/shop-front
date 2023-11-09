@@ -3,26 +3,33 @@ import Carousel from "../components/Carousel";
 import { styled } from "styled-components";
 import axios from "axios";
 import RecommendProducts from "../components/RecommendProducts";
+import { useDispatch } from "react-redux";
+import { falseLoading, trueLoading } from "../store/loadingSlice";
 
 function Home() {
   const [image, setImage] = useState([]);
   const [best, setBest] = useState([]);
   const [newItem, setNewItem] = useState([]);
 
+  const dispatch = useDispatch();
+
   const fetchData = async (url, setStateFunction, limit) => {
-    try {
-      const response = await axios.get(url);
-      const items = limit ? response.data.slice(0, 8) : response.data;
-      setStateFunction(items);
-    } catch (error) {
-      console.error(error);
-    }
+    await axios
+      .get(url)
+      .then((res) => {
+        const items = limit ? res.data.slice(0, 8) : res.data;
+        setStateFunction(items);
+        dispatch(falseLoading());
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
+    dispatch(trueLoading());
     fetchData("/carousel/item", setImage, false);
     fetchData("/best/item", setBest, true);
     fetchData("/new/item", setNewItem, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -52,15 +59,15 @@ const Title = styled.h2`
   font-size: 32px;
   font-weight: bold;
   text-align: left;
-  letter-spacing: -4px;
+  letter-spacing: -1px;
   margin-bottom: 30px;
   word-break: break-word;
 `;
 
-const RecommendContainer = styled.div`
+export const RecommendContainer = styled.div`
   width: 100%;
   display: flex;
-  margin-bottom: 50px;
+  margin-bottom: 165px;
   flex-wrap: wrap;
   justify-content: space-between;
 `;

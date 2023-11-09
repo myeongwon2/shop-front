@@ -1,35 +1,35 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import cart from "./cartSlice";
+import { user, search } from "./userSlice";
+import loading from "./loadingSlice";
+import favor from "./favorSlice";
+import payment from "./payment";
+import persistReducer from "redux-persist/es/persistReducer";
+import storage from "redux-persist/lib/storage";
 
-//useState랑 비슷
-const user = createSlice({
-  name: "user",
-  initialState: "kim",
-  reducers: {
-    changeName(state) {
-      return state + " min";
-    },
-  },
+const reducers = combineReducers({
+  user: user.reducer,
+  search: search.reducer,
+  cart: cart.reducer,
+  favor: favor.reducer,
+  payment: payment.reducer,
+  loading: loading.reducer,
 });
 
-export const { changeName } = user.actions;
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["cart", "user", "favor"],
+};
 
-const loading = createSlice({
-  name: "loading",
-  initialState: true,
-  reducers: {
-    changeLoading(state) {
-      return false;
-    },
-  },
+const persistedReducer = persistReducer(persistConfig, reducers);
+
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
-export const { changeLoading } = loading.actions;
-
-export default configureStore({
-  reducer: {
-    user: user.reducer,
-    cart: cart.reducer,
-    loading: loading.reducer,
-  },
-});
+export default store;

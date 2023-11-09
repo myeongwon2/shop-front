@@ -1,33 +1,43 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Home from "./page/Home";
-import NavigationBar from "./components/Navbar";
+import Navbar from "./components/Navbar";
 import Cart from "./page/Cart";
 import { useSelector } from "react-redux";
 import { styled } from "styled-components";
 import Spinner from "./img/Spinner.gif";
 import Footer from "./components/Footer";
-import BestDetail from "./page/BestDetail";
-import NewDetail from "./page/NewDetail";
+import DetailPage from "./page/DetailPage";
+import PayMentPage from "./page/PayPage";
+import Favorite from "./page/Favorite";
+import BestPage from "./page/BestPage";
+import NewPage from "./page/NewPage";
+import SearchPage from "./page/Searchpage";
+import MyPage from "./page/MyPage";
 
 function App() {
-  const store = useSelector((state) => {
+  const loading = useSelector((state) => {
     return state.loading;
   });
-  console.log(store);
 
   return (
     <div className="App">
-      <Background $store={store}>
+      <Background $loading={loading}>
         <img src={Spinner} alt="로딩중" width="10%" />
       </Background>
-      <NavigationBar />
-      <Container $display={store}>
+      <Navbar />
+      <Container $loading={loading}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/best/:id" element={<BestDetail />} />
-          <Route path="/new/:id" element={<NewDetail />} />
+          <Route path="/bestpage" element={<BestPage />} />
+          <Route path="/best/:id" element={<DetailPage />} />
+          <Route path="/newpage" element={<NewPage />} />
+          <Route path="/new/:id" element={<DetailPage />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/searchpage" element={<SearchPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/payment" element={<PayMentPage />} />
+          <Route path="/favorite" element={<Favorite />} />
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </Container>
@@ -37,7 +47,7 @@ function App() {
 }
 
 const Container = styled.div`
-  display: ${(props) => (props.$display ? "none" : null)};
+  display: ${(props) => (props.$loading ? "none" : null)};
 `;
 
 const Background = styled.div`
@@ -47,7 +57,7 @@ const Background = styled.div`
   background: #e2e2e2;
   opacity: 0.6;
   z-index: 1000;
-  display: ${(props) => (props.$store ? "flex" : "none")};
+  display: ${(props) => (props.$loading ? "flex" : "none")};
   align-items: center;
   justify-content: center;
 `;

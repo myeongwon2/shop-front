@@ -21,9 +21,9 @@ function RecommendProducts({ products, type }) {
   ));
 }
 
-const RecommendProduct = styled.div`
+export const RecommendProduct = styled.div`
   width: 24%;
-  min-height: 400px;
+  min-height: 360px;
   margin: 0px 0px 0px 0px;
   cursor: pointer;
   @media (max-width: 770px) {
@@ -31,7 +31,7 @@ const RecommendProduct = styled.div`
   }
 `;
 
-const enlargeAnimation = keyframes`
+export const enlargeAnimation = keyframes`
   0% {
     background-size: 100%;
   }
@@ -40,7 +40,7 @@ const enlargeAnimation = keyframes`
   }
 `;
 
-const RecommendItem = styled.div`
+export const RecommendItem = styled.div`
   height: 85%;
   background-image: url(${(props) => props.src});
   background-size: cover;
@@ -52,7 +52,7 @@ const RecommendItem = styled.div`
   }
 `;
 
-const ContextBox = styled.div`
+export const ContextBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
