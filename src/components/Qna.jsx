@@ -22,7 +22,7 @@ function Qna({ url, value }) {
 
   const getData = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API / url}`, { params: { value: value } })
+      .get(`${process.env.REACT_APP_API + url}`, { params: { value: value } })
       .then((res) => {
         setData(res.data);
         setTotalPages(Math.ceil(res.data.length / itemsPerPage));
