@@ -18,7 +18,7 @@ function BestPage() {
 
   const getItem = async () => {
     axios
-      .get(`best/item`)
+      .get(`${process.env.REACT_APP_API}best/item`)
       .then((res) => {
         setItem(res.data);
         dispatch(falseLoading());

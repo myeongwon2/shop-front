@@ -37,13 +37,14 @@ const Carousel = ({ image }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    image.forEach(({ src }) => {
-      const newImage = new Image();
-      newImage.onload = () => {
-        setLoadedCount((prev) => prev + 1);
-      };
-      newImage.src = src;
-    });
+    image &&
+      image.forEach(({ src }) => {
+        const newImage = new Image();
+        newImage.onload = () => {
+          setLoadedCount((prev) => prev + 1);
+        };
+        newImage.src = src;
+      });
   }, [image]);
 
   useEffect(() => {

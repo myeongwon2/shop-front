@@ -15,7 +15,7 @@ function Home() {
 
   const fetchData = async (url, setStateFunction, limit) => {
     await axios
-      .get(url)
+      .get(`${process.env.REACT_APP_API}url`)
       .then((res) => {
         const items = limit ? res.data.slice(0, 8) : res.data;
         setStateFunction(items);
@@ -26,15 +26,15 @@ function Home() {
 
   useEffect(() => {
     dispatch(trueLoading());
-    fetchData("carousel/item", setImage, false);
-    fetchData("best/item", setBest, true);
-    fetchData("new/item", setNewItem, true);
+    fetchData(`${process.env.REACT_APP_API}carousel/item`, setImage, false);
+    fetchData(`${process.env.REACT_APP_API}best/item`, setBest, true);
+    fetchData(`${process.env.REACT_APP_API}new/item`, setNewItem, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div>
-      <Carousel image={image} />
+      {image && <Carousel image={image} />}
       <Container>
         <Title>베스트 추천 상품</Title>
         <RecommendContainer>
