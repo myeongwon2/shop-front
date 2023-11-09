@@ -70,13 +70,11 @@ function Navbar() {
   };
 
   const getSearch = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API}/search`, { params: { value: search } })
-      .then((res) => {
-        dispatch(getData(res.data));
-        setSearch("");
-        dispatch(falseLoading());
-      });
+    await axios.get(`search`, { params: { value: search } }).then((res) => {
+      dispatch(getData(res.data));
+      setSearch("");
+      dispatch(falseLoading());
+    });
   };
 
   const handleKeyPress = (e) => {

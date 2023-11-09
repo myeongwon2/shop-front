@@ -21,13 +21,11 @@ function Qna({ url, value }) {
   };
 
   const getData = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API + url}`, { params: { value: value } })
-      .then((res) => {
-        setData(res.data);
-        setTotalPages(Math.ceil(res.data.length / itemsPerPage));
-        dispatch(falseLoading());
-      });
+    await axios.get(`url`, { params: { value: value } }).then((res) => {
+      setData(res.data);
+      setTotalPages(Math.ceil(res.data.length / itemsPerPage));
+      dispatch(falseLoading());
+    });
   };
 
   // 페이지 범위를 나타내는 상태 변수

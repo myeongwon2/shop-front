@@ -12,12 +12,9 @@ function DetailPage() {
 
   const getData = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API}/best/detail`,
-        {
-          params: { value: id },
-        }
-      );
+      const response = await axios.get("best/detail", {
+        params: { value: id },
+      });
       setData(response.data);
     } catch (error) {
       console.error(error);
