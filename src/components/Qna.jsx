@@ -264,7 +264,7 @@ function Qna({ url, value }) {
           </Box>
         </Box>
       </Toggle>
-      <Box $bt="1px solid black">
+      <Box>
         <QnaHead>
           <ColGroup>
             <Col style={{ width: "164px" }} />
@@ -327,6 +327,7 @@ const QnaHead = styled.div`
   width: 100%;
   table-layout: fixed;
   margin: 0 auto;
+  border-top: 1px solid black;
   border-bottom: 1px solid #e1e1e1;
 `;
 const ColGroup = styled.div`
