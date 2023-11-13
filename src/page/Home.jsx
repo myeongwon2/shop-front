@@ -3,11 +3,15 @@ import Carousel from "../components/Carousel";
 import { styled } from "styled-components";
 import axios from "axios";
 import RecommendProducts from "../components/RecommendProducts";
+import { useDispatch } from "react-redux";
+import { falseLoading, trueLoading } from "../store/loadingSlice";
 
 function Home() {
   const [image, setImage] = useState([]);
   const [best, setBest] = useState([]);
   const [newItem, setNewItem] = useState([]);
+
+  const dispatch = useDispatch();
 
   const fetchData = async (url, setStateFunction, limit) => {
     await axios
@@ -15,11 +19,13 @@ function Home() {
       .then((res) => {
         const items = limit ? res.data.slice(0, 8) : res.data;
         setStateFunction(items);
+        dispatch(falseLoading());
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
+    dispatch(trueLoading());
     fetchData(
       `${process.env.REACT_APP_API_URL}/carousel/item`,
       setImage,
