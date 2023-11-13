@@ -124,7 +124,8 @@ function DetailContext({ data }) {
           <IconBtn
             href="#"
             $image={newfavor.length === 1 ? favorTrue : favorImg}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               dispatch(favorAdd({ data: data[0], user: user }));
             }}
           />

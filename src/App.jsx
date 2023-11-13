@@ -38,7 +38,7 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/payment" element={<PayMentPage />} />
           <Route path="/favorite" element={<Favorite />} />
-          <Route path="*" element={<div>404</div>} />
+          <Route path="*" element={<Home />} />
         </Routes>
       </Container>
       <Footer />

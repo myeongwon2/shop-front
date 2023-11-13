@@ -8,6 +8,7 @@ export const Container = styled.div`
   height: auto;
   margin: 0 auto;
   padding: 0 10px;
+  padding: ${(props) => props.$pd || "0 10px"};
   /* border: 1px solid black; */
 `;
 
@@ -21,6 +22,7 @@ export const Box = styled.div`
   margin: ${(props) => props.$mg};
   border-bottom: ${(props) => props.$bb};
   border-top: ${(props) => props.$bt};
+  background-color: ${(props) => props.$bc};
   cursor: ${(props) => props.$c};
   /* border: 1px solid black; */
 `;
@@ -44,7 +46,7 @@ export const Button = styled.button`
   background-color: ${(props) => props.$bc};
   line-height: ${(props) => props.$lh || 1};
   font-size: ${(props) => props.$s || "14px"};
-  border: 1px solid #ebeef2;
+  border: 1px solid ${(props) => props.$b || "#ebeef2"};
   border-radius: 8px;
   cursor: pointer;
 `;

@@ -48,7 +48,7 @@ function MenuBar({ src, id }) {
 
   return (
     <Container>
-      {scroll && <Dummy $w={"70px"} />}
+      {scroll && <Dummy $h={"70px"} />}
       <TableStyle $scroll={scroll}>
         <Table>
           {item.map((item) => (
@@ -70,7 +70,7 @@ function MenuBar({ src, id }) {
       <ContextBox $scroll={scroll} ref={itemRef}>
         <ImageBox src={src} />
       </ContextBox>
-      <Dummy $w={"160px"} ref={reviewRef} />
+      <Dummy $h={"160px"} ref={reviewRef} />
       <ContextBox>
         <Box $bb="1px solid black">
           <Title>리뷰</Title>
@@ -90,8 +90,8 @@ function MenuBar({ src, id }) {
           </div>
         </div>
       </ContextBox>
-      <Dummy $w={"150px"} />
-      <ContextBox ref={qnaRef}>
+      <Dummy $h={"150px"} ref={qnaRef} />
+      <ContextBox>
         <Qna url="/qna" value={id} />
       </ContextBox>
     </Container>
@@ -105,7 +105,7 @@ const Container = styled.div`
 `;
 
 const Dummy = styled.div`
-  height: ${(props) => props.$w};
+  height: ${(props) => props.$h};
   visibility: hidden;
 `;
 

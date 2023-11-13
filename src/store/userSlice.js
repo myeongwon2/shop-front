@@ -2,13 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const user = createSlice({
   name: "user",
-  initialState: { email: "admin" },
+  initialState: { email: "admin@gamil.com" },
   reducers: {
     setUserData(state, action) {
       return (state = action.payload);
     },
     logout() {
-      return { email: "admin" };
+      return { email: "admin@gamil.com" };
     },
   },
 });

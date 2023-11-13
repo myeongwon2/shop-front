@@ -3,7 +3,7 @@ import styled from "styled-components";
 import pauseImg from "../img/pause.png";
 import playImg from "../img/player3.png";
 import { useDispatch } from "react-redux";
-import { falseLoading } from "../store/loadingSlice";
+import { falseLoading, trueLoading } from "../store/loadingSlice";
 
 const Carousel = ({ image }) => {
   const [index, setIndex] = useState(0);
@@ -37,17 +37,17 @@ const Carousel = ({ image }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    image &&
-      image.forEach(({ src }) => {
-        const newImage = new Image();
-        newImage.onload = () => {
-          setLoadedCount((prev) => prev + 1);
-        };
-        newImage.src = src;
-      });
+    image.forEach(({ src }) => {
+      const newImage = new Image();
+      newImage.onload = () => {
+        setLoadedCount((prev) => prev + 1);
+      };
+      newImage.src = src;
+    });
   }, [image]);
 
   useEffect(() => {
+    dispatch(trueLoading());
     if (image.length > 4 && loadedCount === image.length) {
       dispatch(falseLoading());
     }
@@ -83,7 +83,7 @@ const Container = styled.div`
   overflow: hidden;
   display: flex;
   @media (max-width: 1000px) {
-    height: 48vw;
+    height: 60vw;
   }
 `;
 
@@ -175,6 +175,9 @@ const IndexCount = styled.div`
 const Center = styled.img`
   max-width: 100%;
   max-height: 100%;
+  @media (max-width: 770px) {
+    height: 240px;
+  }
 `;
 
 const Side = styled.img`

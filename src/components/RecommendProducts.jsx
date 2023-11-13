@@ -28,6 +28,7 @@ export const RecommendProduct = styled.div`
   cursor: pointer;
   @media (max-width: 770px) {
     width: 48%;
+    min-height: 250px;
   }
 `;
 
